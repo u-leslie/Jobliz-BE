@@ -9,7 +9,12 @@ public class UserMapper {
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getRole(),
+                user.getProfilePicture(),
+                user.getPassword(),
+                user.getCreated()
+
         );
     }
     public static User mapToUser(UserDto userDto) {
@@ -17,7 +22,11 @@ public class UserMapper {
                   userDto.getId(),
                   userDto.getFirstName(),
                   userDto.getLastName(),
-                  userDto.getEmail()
+                  userDto.getEmail(),
+                  userDto.getRole(),
+                  userDto.getProfilePicture(),
+                  userDto.getPassword(),
+                  userDto.getCreated()
           );
     }
 }

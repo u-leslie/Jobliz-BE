@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class UserController {
 
     //get user by id
     @GetMapping("{id}")
-    public ResponseEntity<UserDto> getUserById( @PathVariable("id") Long UserId){
+    public ResponseEntity<UserDto> getUserById( @PathVariable("id") UUID UserId){
         UserDto userDto = userService.getUserById(UserId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
@@ -41,14 +42,14 @@ public class UserController {
 
     //update user
     @PutMapping("{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId,@RequestBody UserDto updatedUserDto){
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") UUID userId,@RequestBody UserDto updatedUserDto){
         UserDto userDto = userService.updateUser(userId,updatedUserDto);
         return ResponseEntity.ok(userDto);
     }
 
     //delete user
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId){
+    public ResponseEntity<String> deleteUser(@PathVariable("id") UUID userId){
         userService.deleteUser(userId);
         return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
     }
