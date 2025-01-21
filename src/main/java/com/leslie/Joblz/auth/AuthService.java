@@ -2,14 +2,17 @@ package com.leslie.Joblz.auth;
 
 import com.leslie.Joblz.dtos.LoginRequest;
 import com.leslie.Joblz.dtos.LoginResponse;
+import com.leslie.Joblz.dtos.UserDto;
 import com.leslie.Joblz.entities.User;
 import com.leslie.Joblz.repositories.UserRepository;
+import com.leslie.Joblz.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.leslie.Joblz.dtos.UserDto;
 
 import java.security.Key;
 import java.util.Date;

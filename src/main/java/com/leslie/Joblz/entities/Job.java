@@ -50,7 +50,7 @@ public class Job {
     private Date deadline;
 
     @ManyToOne
-    @JoinColumn(name="employer_id")
+    @JoinColumn(name="employer_id",nullable = false)
     private User employer;
 
 }

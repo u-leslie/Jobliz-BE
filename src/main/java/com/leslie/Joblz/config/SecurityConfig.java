@@ -30,7 +30,7 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "api/v1/users/add"
                         ).permitAll()
-                        .requestMatchers("/api/v1/users").permitAll()
+                        .requestMatchers("/api/v1/users").hasRole("ADMIN")
                         .requestMatchers("/api/v1/auth/login").permitAll()
                         .requestMatchers("/api/v1/jobs/**").hasRole("JOB_SEEKER")
                         .anyRequest().authenticated()

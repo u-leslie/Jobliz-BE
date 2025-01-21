@@ -17,29 +17,23 @@ import java.util.UUID;
 public class UserController {
     private UserService userService;
 
-    //create user
-    @PostMapping("/add")
-    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
-        UserDto savedUser = userService.addUser(userDto);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }
 
     //get user by id
-    @GetMapping("{id}")
+    @GetMapping("getById/{id}")
     public ResponseEntity<UserDto> getUserById( @PathVariable("id") UUID UserId){
         UserDto userDto = userService.getUserById(UserId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     //get all users
-    @GetMapping
+    @GetMapping("/getAllUsers")
     public ResponseEntity<List<UserDto>> getAllUsers(){
         List<UserDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     //update user
-    @PutMapping("{id}")
+    @PutMapping("updateById/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") UUID userId,@RequestBody UserDto updatedUserDto){
         UserDto userDto = userService.updateUser(userId,updatedUserDto);
         return ResponseEntity.ok(userDto);
