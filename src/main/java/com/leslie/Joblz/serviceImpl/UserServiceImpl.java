@@ -2,9 +2,11 @@ package com.leslie.Joblz.serviceImpl;
 
 import com.leslie.Joblz.dtos.UserDto;
 import com.leslie.Joblz.entities.User;
+import com.leslie.Joblz.enums.UserRole;
 import com.leslie.Joblz.exceptions.NotFound;
 import com.leslie.Joblz.mappers.UserMapper;
 import com.leslie.Joblz.repositories.UserRepository;
+import com.leslie.Joblz.services.PasswordService;
 import com.leslie.Joblz.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+    private PasswordService passwordService;
     @Override
     public UserDto addUser(UserDto userDto) {
         User user = UserMapper.mapToUser(userDto);
+        if (user.getRole() == null) {
+            user.setRole(UserRole.JOB_SEEKER);
+        }
+        String hashedPassword = passwordService.hashPassword(user.getPassword());
+        user.setPassword(hashedPassword);
         User savedUser= userRepository.save(user);
         return UserMapper.mapToUserDto(savedUser);
     }
@@ -47,7 +55,11 @@ public class UserServiceImpl implements UserService {
        user.setFirstName(updatedUserDto.getFirstName());
        user.setLastName(updatedUserDto.getLastName());
        user.setEmail(updatedUserDto.getEmail());
-       user.setPassword(updatedUserDto.getPassword());
+
+        if (updatedUserDto.getPassword() != null && !updatedUserDto.getPassword().isEmpty()) {
+            String hashedPassword = passwordService.hashPassword(updatedUserDto.getPassword());
+            user.setPassword(hashedPassword);
+        }
        user.setRole(updatedUserDto.getRole());
        user.setProfilePicture(updatedUserDto.getProfilePicture());
       User updatedUser = userRepository.save(user);
