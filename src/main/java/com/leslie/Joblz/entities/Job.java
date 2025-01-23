@@ -33,6 +33,7 @@ public class Job {
     @Column (name="status",nullable = false)
     private JobStatus status;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="type",nullable = false)
     private JobType type;
 

@@ -1,21 +1,13 @@
 package com.leslie.Joblz.auth;
-
 import com.leslie.Joblz.dtos.LoginRequest;
 import com.leslie.Joblz.dtos.LoginResponse;
-import com.leslie.Joblz.dtos.UserDto;
 import com.leslie.Joblz.entities.User;
 import com.leslie.Joblz.repositories.UserRepository;
-import com.leslie.Joblz.services.UserService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import com.leslie.Joblz.services.JwtService;
+import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.leslie.Joblz.dtos.UserDto;
-
-import java.security.Key;
-import java.util.Date;
 
 
 @Service
@@ -24,8 +16,11 @@ public class AuthService {
 
       private final UserRepository userRepository;
       private final PasswordEncoder passwordEncoder;
-      private final Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+      private static final Dotenv dotenv = Dotenv.load();
+      private static final String jwtSecret = dotenv.get("SECRET_KEY");
       private final long jwtExpirationMs = 86400000L;
+      private final JwtService jwtService;
+
 
       public LoginResponse login(LoginRequest request) {
             User user = userRepository.findByEmail(request.getEmail())
@@ -34,19 +29,9 @@ public class AuthService {
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                   throw new IllegalArgumentException("Invalid email or password");
             }
-
-            String token = generateToken(user);
-
+            String token = jwtService.generateToken(user,user.getRole());
             return new LoginResponse(token, user.getRole());
       }
 
-      private String generateToken(User user) {
-            return Jwts.builder()
-                    .setSubject(user.getEmail())
-                    .claim("role", user.getRole())
-                    .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                    .signWith(SignatureAlgorithm.HS256, jwtSecret)
-                    .compact();
-      }
+
 }

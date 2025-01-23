@@ -6,6 +6,7 @@ import com.leslie.Joblz.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +29,10 @@ public class UserController {
     //get all users
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<UserDto>> getAllUsers(){
+        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next().getAuthority();
+        if(!"ADMIN".equals(role)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         List<UserDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
