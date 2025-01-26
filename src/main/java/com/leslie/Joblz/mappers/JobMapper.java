@@ -2,6 +2,7 @@ package com.leslie.Joblz.mappers;
 
 import com.leslie.Joblz.dtos.JobDto;
 import com.leslie.Joblz.entities.Job;
+import com.leslie.Joblz.entities.User;
 
 
 public class JobMapper {
@@ -16,11 +17,11 @@ public class JobMapper {
                 job.getMinSalary(),
                 job.getMaxSalary(),
                 job.getDeadline(),
-                job.getEmployer()
+                job.getEmployer().getId()
 
         );
     }
-    public static Job mapToJob(JobDto jobDto) {
+    public static Job mapToJob(JobDto jobDto , User employer) {
         return new Job(
                 jobDto.getId(),
                 jobDto.getTitle(),
@@ -31,7 +32,10 @@ public class JobMapper {
                 jobDto.getMinSalary(),
                 jobDto.getMaxSalary(),
                 jobDto.getDeadline(),
-                jobDto.getEmployer()
+                employer
+
         );
     }
 }
+
+

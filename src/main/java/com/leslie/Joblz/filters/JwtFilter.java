@@ -32,12 +32,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (token != null && token.startsWith("Bearer ")) {
             String jwt = token.substring(7);
-            System.out.println(jwt);
+//            System.out.println(jwt);
             String username = jwtService.extractUsername(jwt);
             String role = jwtService.extractAllClaims(jwt).get("role", String.class);
-            System.out.println("Role" +role);
-            System.out.println("Username"+username);
-
 
             try {
 

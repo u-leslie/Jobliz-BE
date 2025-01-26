@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.leslie.Joblz.entities.User;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,6 +23,6 @@ public class JobDto {
     private Long minSalary;
     private Long maxSalary;
     private Date deadline;
-    private User employer;
+    private UUID employerId;
 
 }

@@ -24,7 +24,6 @@ public class JwtService {
 
     }
 
-
     public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
         final String username = extractUsername(jwtToken);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken));
@@ -42,9 +41,11 @@ public class JwtService {
         return extractClaim(jwtToken, Claims::getSubject);
 
     }
-
-
-
+    public String extractRole(String jwtToken) {
+        Claims claims = extractAllClaims(jwtToken);
+        String role = claims.get("role", String.class);
+        return role;
+    }
     public String generateToken(UserDetails userDetails, UserRole role) {
         return this.generateToken(new HashMap<>(), userDetails,role);
     }
@@ -58,7 +59,6 @@ public class JwtService {
             Map<String, Object> claims,
             UserDetails userDetails,
             UserRole role) {
-        System.out.println("Username used as subject: " + userDetails.getUsername());
         return Jwts
                 .builder()
                 .setClaims(claims)

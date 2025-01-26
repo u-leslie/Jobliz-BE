@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface JobService {
-    JobDto addJob(JobDto jobDto);
+    JobDto addJob(JobDto jobDto,UUID employerId);
     JobDto getJobById(UUID jobId);
     List <JobDto> getJobByType(JobType jobType);
     List<JobDto> getAllJobs();

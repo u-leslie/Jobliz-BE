@@ -50,8 +50,8 @@ public class Job {
     @Column(name="deadline",nullable = false)
     private Date deadline;
 
-    @ManyToOne
-    @JoinColumn(name="employer_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employer_id", nullable = false)
     private User employer;
 
 }

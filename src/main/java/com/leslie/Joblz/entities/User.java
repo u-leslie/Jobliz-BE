@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @Column(name="email" ,nullable= false,unique = true  )
     private String email;
 
+    @Column(name = "phone",nullable = false)
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     @Column(name="role",nullable = false)
     private UserRole role= UserRole.JOB_SEEKER;
@@ -49,6 +52,9 @@ public class User implements UserDetails {
     private Date created=new Date() ;
 
 
+//    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Job> jobs;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
@@ -56,7 +62,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-    return getEmail();
+    return getId().toString();
     }
 
     @Override

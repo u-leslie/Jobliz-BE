@@ -2,6 +2,7 @@ package com.leslie.Joblz.serviceImpl;
 
 import com.leslie.Joblz.dtos.JobDto;
 import com.leslie.Joblz.entities.Job;
+import com.leslie.Joblz.entities.User;
 import com.leslie.Joblz.enums.JobType;
 import com.leslie.Joblz.exceptions.NotFound;
 import com.leslie.Joblz.mappers.JobMapper;
@@ -22,8 +23,11 @@ public class JobServiceImpl implements JobService {
     private JobRepository jobRepository;
 
     @Override
-    public JobDto addJob(JobDto jobDto) {
-        Job job = JobMapper.mapToJob(jobDto);
+    public JobDto addJob(JobDto jobDto,UUID employerId) {
+        User employer = userRepository.findById(employerId)
+                .orElseThrow(()-> new NotFound("Employer not found"));
+        Job job = JobMapper.mapToJob(jobDto,employer);
+//        job.setEmployer(employer);
         Job savedJob = jobRepository.save(job);
         return JobMapper.mapToJobDto(savedJob);
     }

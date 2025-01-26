@@ -2,6 +2,7 @@ package com.leslie.Joblz.controllers;
 
 import com.leslie.Joblz.dtos.JobDto;
 import com.leslie.Joblz.services.JobService;
+import com.leslie.Joblz.services.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +19,23 @@ import java.util.UUID;
 @RequestMapping("/api/v1/jobs")
 public class JobController {
 private JobService jobService;
+private JwtService jwtService;
 
 // create job
     @PreAuthorize("hasAuthority('EMPLOYER')")
     @PostMapping("/create")
-public ResponseEntity<JobDto> create(@RequestBody JobDto jobDto) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("User Details: " + auth.getPrincipal());
-        System.out.println("Authorities: " + auth.getAuthorities());
-        JobDto savedJob = jobService.addJob(jobDto);
+public ResponseEntity<JobDto> create(@RequestBody JobDto jobDto, @RequestHeader("Authorization") String token) {
+        String subToken = token.substring(7);
+        System.out.println("Auth token: " + token);
+        UUID employerId = UUID.fromString(jwtService.extractUsername(subToken));
+        System.out.println("Employer id: " + employerId);
+       String role = jwtService.extractRole(subToken);
+       System.out.println("Role: " + role);
+       if(employerId == null || !(role == "EMPLOYER")) {
+           System.out.println("Invalid employer id: " + employerId);
+           return  ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+       }
+        JobDto savedJob = jobService.addJob(jobDto,employerId);
         return ResponseEntity.ok(savedJob);
     }
 
