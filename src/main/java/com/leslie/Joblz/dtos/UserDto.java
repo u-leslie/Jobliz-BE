@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -17,9 +20,9 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private String phone;
     private UserRole role;
     private String profilePicture;
     private String password;
     private Date created=new Date() ;
+
 }

@@ -23,14 +23,14 @@ public class JobServiceImpl implements JobService {
     private JobRepository jobRepository;
 
     @Override
-    public JobDto addJob(JobDto jobDto,UUID employerId) {
+    public JobDto addJob(JobDto jobDto, UUID employerId) {
         User employer = userRepository.findById(employerId)
-                .orElseThrow(()-> new NotFound("Employer not found"));
-        Job job = JobMapper.mapToJob(jobDto,employer);
-//        job.setEmployer(employer);
+                .orElseThrow(() -> new NotFound("Employer not found with id: " + employerId));
+        Job job = JobMapper.mapToJob(jobDto, employer);
         Job savedJob = jobRepository.save(job);
         return JobMapper.mapToJobDto(savedJob);
     }
+
 
     @Override
     public JobDto getJobById(UUID jobId) {

@@ -4,6 +4,8 @@ import com.leslie.Joblz.dtos.JobDto;
 import com.leslie.Joblz.entities.Job;
 import com.leslie.Joblz.entities.User;
 
+import static com.leslie.Joblz.mappers.UserMapper.mapToUserDto;
+
 
 public class JobMapper {
     public static JobDto mapToJobDto(Job job) {
@@ -17,7 +19,8 @@ public class JobMapper {
                 job.getMinSalary(),
                 job.getMaxSalary(),
                 job.getDeadline(),
-                job.getEmployer().getId()
+                mapToUserDto(job.getEmployer())
+
 
         );
     }

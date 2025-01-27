@@ -3,6 +3,8 @@ package com.leslie.Joblz.mappers;
 import com.leslie.Joblz.dtos.UserDto;
 import com.leslie.Joblz.entities.User;
 
+import java.util.stream.Collectors;
+
 public class UserMapper {
     public static UserDto mapToUserDto(User user) {
        return new UserDto(
@@ -10,7 +12,6 @@ public class UserMapper {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getPhone(),
                 user.getRole(),
                 user.getProfilePicture(),
                 user.getPassword(),
@@ -24,7 +25,6 @@ public class UserMapper {
                   userDto.getFirstName(),
                   userDto.getLastName(),
                   userDto.getEmail(),
-                  userDto.getPhone(),
                   userDto.getRole(),
                   userDto.getProfilePicture(),
                   userDto.getPassword(),

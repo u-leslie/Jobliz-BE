@@ -21,23 +21,38 @@ public class JobController {
 private JobService jobService;
 private JwtService jwtService;
 
-// create job
     @PreAuthorize("hasAuthority('EMPLOYER')")
     @PostMapping("/create")
-public ResponseEntity<JobDto> create(@RequestBody JobDto jobDto, @RequestHeader("Authorization") String token) {
-        String subToken = token.substring(7);
+    public ResponseEntity<JobDto> create(
+            @RequestBody JobDto jobDto,
+            @RequestHeader("Authorization") String token
+    ) {
+        // Extract token details
+        String subToken = token.substring(7); // Remove "Bearer " prefix
+        UUID employerId = UUID.fromString(jwtService.extractUsername(subToken)); // Extract employer ID
+        String role = jwtService.extractRole(subToken); // Extract role
+
+        // Log extracted details for debugging
         System.out.println("Auth token: " + token);
-        UUID employerId = UUID.fromString(jwtService.extractUsername(subToken));
-        System.out.println("Employer id: " + employerId);
-       String role = jwtService.extractRole(subToken);
-       System.out.println("Role: " + role);
-       if(employerId == null || !(role == "EMPLOYER")) {
-           System.out.println("Invalid employer id: " + employerId);
-           return  ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-       }
-        JobDto savedJob = jobService.addJob(jobDto,employerId);
+        System.out.println("Employer ID: " + employerId);
+        System.out.println("Role: " + role);
+
+        // Validate employer's role and ID
+        if (employerId == null || !"EMPLOYER".equals(role)) { // Use equals for string comparison
+            System.out.println("Invalid employer ID or role");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+//
+//        // Set employer ID in the JobDto
+//        jobDto.setEmployer(employerId);
+
+        // Call service to save the job
+        JobDto savedJob = jobService.addJob(jobDto, employerId);
+
+        // Return saved job in the response
         return ResponseEntity.ok(savedJob);
     }
+
 
  // get job by id
  @GetMapping("/getById/{id}")
