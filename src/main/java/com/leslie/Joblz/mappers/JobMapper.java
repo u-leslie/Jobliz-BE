@@ -19,7 +19,7 @@ public class JobMapper {
                 job.getMinSalary(),
                 job.getMaxSalary(),
                 job.getDeadline(),
-                mapToUserDto(job.getEmployer())
+                job.getEmployer().getId()
 
 
         );

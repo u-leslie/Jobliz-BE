@@ -1,6 +1,7 @@
 package com.leslie.Joblz.controllers;
 
 import com.leslie.Joblz.dtos.JobDto;
+import com.leslie.Joblz.enums.JobType;
 import com.leslie.Joblz.services.JobService;
 import com.leslie.Joblz.services.JwtService;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
+@PreAuthorize("hasAuthority('EMPLOYER')")
 @RequestMapping("/api/v1/jobs")
 public class JobController {
 private JobService jobService;
@@ -27,32 +29,19 @@ private JwtService jwtService;
             @RequestBody JobDto jobDto,
             @RequestHeader("Authorization") String token
     ) {
-        // Extract token details
-        String subToken = token.substring(7); // Remove "Bearer " prefix
-        UUID employerId = UUID.fromString(jwtService.extractUsername(subToken)); // Extract employer ID
-        String role = jwtService.extractRole(subToken); // Extract role
-
-        // Log extracted details for debugging
+        String subToken = token.substring(7);
+        UUID employerId = UUID.fromString(jwtService.extractUsername(subToken));
+        String role = jwtService.extractRole(subToken);
         System.out.println("Auth token: " + token);
         System.out.println("Employer ID: " + employerId);
         System.out.println("Role: " + role);
-
-        // Validate employer's role and ID
-        if (employerId == null || !"EMPLOYER".equals(role)) { // Use equals for string comparison
+        if (employerId == null || !"EMPLOYER".equals(role)) {
             System.out.println("Invalid employer ID or role");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-//
-//        // Set employer ID in the JobDto
-//        jobDto.setEmployer(employerId);
-
-        // Call service to save the job
         JobDto savedJob = jobService.addJob(jobDto, employerId);
-
-        // Return saved job in the response
         return ResponseEntity.ok(savedJob);
     }
-
 
  // get job by id
  @GetMapping("/getById/{id}")
@@ -60,6 +49,13 @@ private JwtService jwtService;
         JobDto jobDto = jobService.getJobById(id);
         return ResponseEntity.ok(jobDto);
  }
+
+    // get job by id
+    @GetMapping("/getByType/{type}")
+    public ResponseEntity<JobDto> getById(@PathVariable("type") JobType type) {
+        List <JobDto> jobs = jobService.getJobByType(type);
+        return ResponseEntity.ok((JobDto) jobs);
+    }
 
  //get all users
     @GetMapping("/getAllJobs")

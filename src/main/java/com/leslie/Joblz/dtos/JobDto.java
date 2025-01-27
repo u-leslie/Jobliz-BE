@@ -23,7 +23,7 @@ public class JobDto {
     private Long minSalary;
     private Long maxSalary;
     private Date deadline;
-    private UserDto employer;
+    private UUID employer;
 
 
 }
